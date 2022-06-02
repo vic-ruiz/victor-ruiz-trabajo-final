@@ -26,7 +26,12 @@ export default class Container {
 
   async save(product) {
     try {
-      const products = await this.findAll();
+      let products = await this.findAll();
+      console.log(products)
+      if (products === undefined){
+          fs.writeFileSync(this.filePath, "[]");
+          products = [];
+      }
       let id;
       let timestamp = Date.now();
       products.length === 0
@@ -59,13 +64,14 @@ export default class Container {
     }
   }
 
-  async deleteById(id) {
+  async deleteById(id){
     try {
-      const products = await this.findAll();
-      const newProducts = products.filter((p) => p.id !== Number(id));
-      await fs.promises.writeFile(this.filePath, JSON.stringify(newProducts));
+        const products = await this.findAll()
+        const newProducts = products.filter(p => p.id !== Number(id))
+        await fs.promises.writeFile(this.filePath,JSON.stringify(newProducts))
     } catch (error) {
-      throw new Error(`Error: ${error}`);
+        throw new Error(`Error: ${error}`)
     }
-  }
+    
+}
 }

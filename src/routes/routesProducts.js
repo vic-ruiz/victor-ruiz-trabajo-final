@@ -3,15 +3,6 @@ import Container from '../apiClassProducts'
 const router = Router()
 const container = new Container("/dataBase/products.json")
 
-const isAdmin = true
-
-function userStatus(req,res,next){
-    if(!isAdmin){
-        res.send("No tienes acceso a esta ruta")
-    } else {
-        next()
-    }
-}
 
 router.get('/', async(req,res)=>{
     const products = await container.findAll()
@@ -28,19 +19,19 @@ router.get("/:id", async (req, res) => {
       : res.status(404).json({ error: "Product not found" });
   });
 
-  router.post("/",userStatus, async (req, res) => {
+  router.post("/", async (req, res) => {
     const { body } = req;
     await container.save(body);
     res.json({message: 'Producto guardado', producto: body});
   });
 
-  router.delete('/:id',userStatus, async (req, res) => {
+  router.delete('/:id', async (req, res) => {
     const {id} = req.params;
     const wasDeleted = await container.deleteById(id);
     res.json({message: `Product with ID: ${id} was deleted`});
   })
 
-  router.put('/:id',userStatus, async (req, res) => {
+  router.put('/:id', async (req, res) => {
     const {id} = req.params;
     const {body} = req;
     const product = container.getById(parseInt(id));
