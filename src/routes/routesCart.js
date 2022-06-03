@@ -34,4 +34,12 @@ router.post('/:id/productos/:id_prod', async (req,res) => {
     res.json(addedProduct)
 })
 
+router.delete('/:id/productos/:id_prod', async (req,res) => {
+    const {id} = req.params
+    const {id_prod} = req.params
+    const productDeleted = await cart.deleteProductInCart(parseInt(id),parseInt(id_prod))
+    res.json("Product in Cart was deleted")
+})
+
+
 module.exports = router;

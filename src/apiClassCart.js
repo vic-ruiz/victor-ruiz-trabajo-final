@@ -1,4 +1,5 @@
 import fs from "fs";
+import { stringify } from "querystring";
 
 export default class cartContainer {
   constructor(filePath) {
@@ -75,13 +76,15 @@ async addProductToCart(id,product){
 async deleteProductInCart(id,id_prod){
     try {
         const cart = await this.findCartById(id)
-        const products = cart[1].filter(p => p.id !== Number(id_prod))
+        const data =cart["products"]
+        console.log(data)
+        console.log(id)
+        console.log(id_prod)
+        const products = data.filter(p => p.id !== id_prod)
         await fs.promises.writeFile(this.filePath,JSON.stringify(products))
     } catch (error) {
         console.log(`Error Code: ${error.code}`);
     }    
 }
-
-
 
 }
