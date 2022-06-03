@@ -58,11 +58,11 @@ async addProductToCart(id,product){
     try {
         const carts = await this.findAll()
         const cart = await this.findCartById(id)
-        const cartProducts = Object.assign(cart.productos,product)
-        cart.productos=cartProducts
+        const cartProducts = Object.assign(cart.products,product)
+        cart.products=cartProducts
         carts.map(e=>{
             if (e.id == Number(id)){
-                e.productos = cart.productos
+                e.products = cart.products
             }    
         })
         await fs.promises.writeFile(this.filePath,JSON.stringify(carts))
