@@ -27,7 +27,6 @@ export default class Container {
   async save(product) {
     try {
       let products = await this.findAll();
-      console.log(products)
       if (products === undefined){
           fs.writeFileSync(this.filePath, "[]");
           products = [];

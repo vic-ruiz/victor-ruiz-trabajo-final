@@ -16,7 +16,11 @@ export default class cartContainer {
 
   async createCart(){
     try {
-        const carts = await this.findAll()
+        let carts = await this.findAll()
+        if (carts === undefined){
+            fs.writeFileSync(this.filePath, "[]");
+            carts = [];
+        }
         let id
         let products = {}
         let timestamp = Date.now()
@@ -48,6 +52,34 @@ async findCartById(id){
     } catch (error) {
         console.log(`Error Code: ${error.code}`);
     }
+}
+
+async addProductToCart(id,product){
+    try {
+        const carts = await this.findAll()
+        const cart = await this.findCartById(id)
+        const cartProducts = Object.assign(cart.productos,product)
+        cart.productos=cartProducts
+        carts.map(e=>{
+            if (e.id == Number(id)){
+                e.productos = cart.productos
+            }    
+        })
+        await fs.promises.writeFile(this.filePath,JSON.stringify(carts))
+        return product
+    } catch (error) {
+        console.log(`Error Code: ${error.code}`);
+    }
+}
+
+async deleteProductInCart(id,id_prod){
+    try {
+        const cart = await this.findCartById(id)
+        const products = cart[1].filter(p => p.id !== Number(id_prod))
+        await fs.promises.writeFile(this.filePath,JSON.stringify(products))
+    } catch (error) {
+        console.log(`Error Code: ${error.code}`);
+    }    
 }
 
 
